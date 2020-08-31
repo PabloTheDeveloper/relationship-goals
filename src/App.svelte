@@ -1,30 +1,23 @@
 <script lang="ts">
-	export let name: string;
+  import { myGoals, Goal, showCompletedDeleteMode, Topic } from "./store";
+
+  import Header from "./Header.svelte";
+  import Options from "./Options.svelte";
+  import GoalsTable from "./GoalsTable.svelte";
+  let selected: number = -1;
+
+  function updateInput(idx: number, attribute: string) {
+    return function (event: any) {
+      if (attribute == "dueDate") {
+        console.log(event.target.value.slice(0, 16));
+      }
+      console.log(event.target.value);
+    };
+  }
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+  <Header />
+  <Options />
+  <GoalsTable />
 </main>
-
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
