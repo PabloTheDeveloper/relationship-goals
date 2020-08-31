@@ -42,6 +42,13 @@ export class Goal {
   }
 }
 
+const extractDateInfo = (datetimeLocal: string) => {
+  let [year, month, dayTime] = datetimeLocal.split("-")
+  let [day, time] = dayTime.split("T")
+  let [hour, minute] = time.split(":")
+  return [parseInt(year), parseInt(month), parseInt(day), parseInt(hour), parseInt(minute)]
+}
+
 export const createTopics = () => {
   const { set, subscribe, update } = writable([])
   return {
@@ -95,6 +102,23 @@ export const createTopics = () => {
 export const createGoals = () => {
   const { set, subscribe, update } = writable([])
   return {
+    sortGoals: () => {
+      update(items => {
+        return [...items.sort((goalA, goalB) => {
+          let dateInfoA = extractDateInfo(goalA.dueDate)
+          let dateInfoB = extractDateInfo(goalB.dueDate)
+          console.log(dateInfoA, dateInfoB)
+          let i = 0
+          while (i < 5) {
+            if (dateInfoA[i] != dateInfoB[i]) {
+              return dateInfoA[i] - dateInfoB[i]
+            }
+            i++
+          }
+          return 0
+        })]
+      })
+    },
     addGoal: (goal: Goal, isDBBacked: boolean) => {
       if (isDBBacked) {
         db.collection("goals").add({
@@ -104,10 +128,40 @@ export const createGoals = () => {
           dueDate: goal.dueDate,
         }).then((docRef) => {
           goal.id = docRef.id
-          update(items => [goal, ...items])
+          update(items => {
+            items = [...items, goal]
+            return [...items.sort((goalA, goalB) => {
+              let dateInfoA = extractDateInfo(goalA.dueDate)
+              let dateInfoB = extractDateInfo(goalB.dueDate)
+              console.log(dateInfoA, dateInfoB)
+              let i = 0
+              while (i < 5) {
+                if (dateInfoA[i] != dateInfoB[i]) {
+                  return dateInfoA[i] - dateInfoB[i]
+                }
+                i++
+              }
+              return 0
+            })]
+          })
         })
       } else {
-        update(items => [goal, ...items])
+        update(items => {
+          items = [...items, goal]
+          return [...items.sort((goalA, goalB) => {
+            let dateInfoA = extractDateInfo(goalA.dueDate)
+            let dateInfoB = extractDateInfo(goalB.dueDate)
+            console.log(dateInfoA, dateInfoB)
+            let i = 0
+            while (i < 5) {
+              if (dateInfoA[i] != dateInfoB[i]) {
+                return dateInfoA[i] - dateInfoB[i]
+              }
+              i++
+            }
+            return 0
+          })]
+        })
       }
     },
     deleteGoal: (idx: number) => {
