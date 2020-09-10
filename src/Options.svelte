@@ -29,7 +29,6 @@
 <style>
   .options {
     display: flex;
-    padding: 0px 20px;
     box-sizing: border-box;
     align-items: center;
     justify-content: center;
@@ -42,31 +41,32 @@
   .optionEditor > div {
     display: flex;
     flex-direction: column;
-    width: 40%;
-    max-width: 400px;
+    width: 260px;
   }
-  .optionEditor > div > div {
-    display: flex;
-    flex-direction: row;
-  }
-  span {
-    font-weight: 200;
-    font-size: 20px;
-    color: lightslategray;
-  }
-  label,
+
   input,
-  label,
   textarea,
   select,
   button {
     display: flex;
     align-items: center;
-    border-radius: 30px;
-    padding: 4px 16px;
-    margin: 4px 4px;
     font-weight: 200;
+    font-size: 20px;
+    margin-bottom: 8px;
     border: grey 1px solid;
+  }
+  label {
+    display: flex;
+    font-weight: 200;
+    font-size: 20px;
+    padding: 8px 12px;
+    border: black solid 1px;
+    border-right: none;
+    border-top: none;
+    width: 80px;
+    text-align: center;
+    box-sizing: border-box;
+    background: white;
   }
   button {
     display: block;
@@ -82,25 +82,38 @@
   input[type="radio"] {
     display: none;
   }
+  .selectedTab {
+    background: #f3efee;
+    border-bottom: #f3efee solid 1px;
+  }
+  .selectedTabLeft {
+    background: #f3efee;
+    border-bottom: #f3efee solid 1px;
+    border-right: none;
+    border-left: none;
+  }
+  .selectedTabRight {
+    background: #f3efee;
+    border-bottom: #f3efee solid 1px;
+  }
 </style>
 
-<div class="OptionContainer">
-  {#if $OptionsMode}
+{#if $OptionsMode}
+  <div style="border: 1px solid black; margin: 16px 36px; background:#f3efee">
     <div class="options">
-      <label style="background:{option == 1 ? '#ddd' : 'white'}">
+      <label class:selectedTabLeft={option == 1} style="border-left:none;">
         <input type="radio" bind:group={option} value={1} />
         Create Goal
       </label>
-      <span>|</span>
-      <label style="background:{option == 2 ? '#ddd' : 'white'}">
+      <label class:selectedTab={option == 2}>
         <input type="radio" bind:group={option} value={2} />
         New Topic
       </label>
-      <label style="background:{option == 3 ? '#ddd' : 'white'}">
+      <label class:selectedTab={option == 3}>
         <input type="radio" bind:group={option} value={3} />
         Delete Topic
       </label>
-      <label style="background:{option == 4 ? '#ddd' : 'white'}">
+      <label class:selectedTabRight={option == 4}>
         <input type="radio" bind:group={option} value={4} />
         Edit Topic
       </label>
@@ -108,7 +121,6 @@
     <div class="optionEditor">
       {#if option == 1}
         <div>
-          <h2>Create Goal</h2>
           <select
             bind:value={goal.topic}
             style="background:{goal.topic == null ? 'white' : goal.topic.color}">
@@ -146,7 +158,6 @@
         </div>
       {:else if option == 2}
         <div>
-          <h2>Create New Topic</h2>
           <input bind:value={newTopic.text} placeholder="Enter Topic text..." />
           <select
             bind:value={newTopic.color}
@@ -175,7 +186,6 @@
         </div>
       {:else if option == 3}
         <div>
-          <h2>Delete Topic</h2>
           <select bind:value={deleteTopic.id} style="background:white;">
             <option disabled selected value="">-- Select a Topic --</option>
             {#each $myTopics as topic}
@@ -202,7 +212,6 @@
         </div>
       {:else if option == 4}
         <div>
-          <h2>Edit Topic</h2>
           <select
             bind:value={editTopic}
             style="background:{editTopic.id == '' ? 'white' : editTopic.color};">
@@ -242,5 +251,5 @@
         </div>
       {/if}
     </div>
-  {/if}
-</div>
+  </div>
+{/if}

@@ -33,12 +33,14 @@ export class Goal {
   text: string
   notes: string
   dueDate: string
+  isDone: boolean;
 
   constructor(topic, text, notes, dueDate) {
     this.topic = topic
     this.text = text
     this.notes = notes
     this.dueDate = dueDate
+    this.isDone = false
   }
 }
 
@@ -126,6 +128,7 @@ export const createGoals = () => {
           text: goal.text,
           notes: goal.notes,
           dueDate: goal.dueDate,
+          isDone: false,
         }).then((docRef) => {
           goal.id = docRef.id
           update(items => {
@@ -203,6 +206,7 @@ db.collection("topics").get().then((querySnapshot) => {
           const data = doc.data()
           const goal = new Goal(topic, data.text, data.notes, data.dueDate)
           goal.id = id
+          goal.isDone = data.isDone
           myGoals.addGoal(goal, false)
         })
       })
