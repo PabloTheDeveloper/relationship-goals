@@ -93,9 +93,9 @@
     </th>
     {#each $myGoals as goal, idx}
       {#if goal.isDone == false && group == 1}
-        <GoalRow bind:goal idx={idx} />
+        <GoalRow bind:goal {idx} />
       {:else if goal.isDone == true && group == 2}
-        <GoalRow bind:goal idx={idx}/>
+        <GoalRow bind:goal {idx} />
       {/if}
     {/each}
   </table>
